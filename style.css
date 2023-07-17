@@ -1,1 +1,41 @@
+:root {
+}
 
+body {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+    'main'
+    'footer';
+  height: 100vh;
+}
+
+main {
+  grid-area: main;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+footer {
+  grid-area: footer;
+  background-color: darkslateblue;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(100px, 200px));
+  grid-template-rows: repeat(3, minmax(100px, 200px));
+  aspect-ratio: 1/1;
+  background-color: lightgreen;
+}
+
+.game-cell {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  border: 2px solid black;
+  font-size: 6rem;
+}
