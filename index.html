@@ -10,16 +10,39 @@
   </head>
   <body>
     <main>
+      <form action="" name="player-form">
+        <div>
+          <label for="player1">Player1</label>
+          <input
+            type="text"
+            name="player1"
+            id="player1"
+            placeholder="change name"
+          />
+          <div>X</div>
+        </div>
+        <div>
+          <label for="player2">Player2</label>
+          <input
+            type="text"
+            name="player2"
+            id="player2"
+            placeholder="change name"
+          />
+          <div>O</div>
+        </div>
+        <button type="submit">start</button>
+      </form>
       <div class="game-board">
-        <div class="game-cell">X</div>
-        <div class="game-cell"></div>
-        <div class="game-cell"></div>
-        <div class="game-cell">O</div>
-        <div class="game-cell"></div>
-        <div class="game-cell"></div>
-        <div class="game-cell"></div>
-        <div class="game-cell"></div>
-        <div class="game-cell"></div>
+        <div class="game-cell" data-index="0"></div>
+        <div class="game-cell" data-index="1"></div>
+        <div class="game-cell" data-index="2"></div>
+        <div class="game-cell" data-index="3"></div>
+        <div class="game-cell" data-index="4"></div>
+        <div class="game-cell" data-index="5"></div>
+        <div class="game-cell" data-index="6"></div>
+        <div class="game-cell" data-index="7"></div>
+        <div class="game-cell" data-index="8"></div>
       </div>
     </main>
     <footer>something something</footer>
