@@ -7,7 +7,9 @@ const game = (function () {
 
   const changePlayer = function (player1, player2) {
     gameCell.forEach((cell) =>
-      cell.addEventListener('click', function () {
+      cell.addEventListener('click', function (e) {
+        if (e.target.innerText) return;
+
         currentPlayer = currentPlayer === player1 ? player2 : player1;
         console.log(currentPlayer);
       })
