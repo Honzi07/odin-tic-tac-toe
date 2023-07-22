@@ -2,27 +2,36 @@
 
 const game = (function () {
   const gameCell = document.querySelectorAll('.game-cell');
-  const gameBoard = ['X', 'O', , , , , 'X', 'O'];
+  const gameBoard = [];
+  let currentPlayer;
 
-  const addSignToCell = function (player1, player2) {
-    console.log(player1, player2);
+  const changePlayer = function (player1, player2) {
+    gameCell.forEach((cell) =>
+      cell.addEventListener('click', function () {
+        currentPlayer = currentPlayer === player1 ? player2 : player1;
+        console.log(currentPlayer);
+      })
+    );
+    addSignToCell();
+  };
 
+  const addSignToCell = function () {
     gameCell.forEach((cell) =>
       cell.addEventListener('click', function (e) {
         const i = e.target.dataset.index;
 
         if (!gameBoard[i]) {
-          gameBoard[i] = player1.sign;
+          gameBoard[i] = currentPlayer.sign;
         }
 
         e.target.innerText = gameBoard[i];
+        console.log(currentPlayer);
         console.log(gameBoard);
       })
     );
   };
 
-  console.log(gameBoard);
-  return { addSignToCell, gameCell, gameBoard };
+  return { changePlayer, addSignToCell, gameCell, gameBoard };
 })();
 
 const player = function () {
@@ -45,7 +54,7 @@ const player = function () {
       const player1 = createPlayer(player1Name, 'X');
       const player2 = createPlayer(player2Name, 'O');
 
-      game.addSignToCell(player1, player2);
+      game.changePlayer(player1, player2);
     });
   };
   return { createPlayer, namePlayer };
