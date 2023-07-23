@@ -29,11 +29,42 @@ const game = (function () {
         e.target.innerText = gameBoard[i];
         console.log(currentPlayer);
         console.log(gameBoard);
+        gameWinner();
       })
     );
   };
 
-  return { changePlayer, addSignToCell, gameCell, gameBoard };
+  const gameWinner = function () {
+    const winCells = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    console.log(currentPlayer);
+
+    for (const arr of winCells) {
+      if (arr.every((cell) => gameBoard[cell] === 'X')) {
+        console.log(`the winner is ${currentPlayer.name}`);
+      }
+      if (arr.every((cell) => gameBoard[cell] === 'O')) {
+        console.log(`the winner is ${currentPlayer.name}`);
+      }
+    }
+  };
+
+  return {
+    changePlayer,
+    addSignToCell,
+    gameWinner,
+    gameCell,
+    gameBoard,
+  };
 })();
 
 const player = function () {
