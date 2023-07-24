@@ -41,3 +41,14 @@ footer {
   border: 2px solid black;
   font-size: 6rem;
 }
+
+.winner-modal {
+  position: absolute;
+  background-color: coral;
+  left: 313px;
+  bottom: 60px;
+}
+
+.hidden {
+  display: none;
+}
