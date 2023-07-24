@@ -29,12 +29,12 @@ const game = (function () {
         e.target.innerText = gameBoard[i];
         console.log(currentPlayer);
         console.log(gameBoard);
-        gameWinner();
+        checkCells();
       })
     );
   };
 
-  const gameWinner = function () {
+  const checkCells = function () {
     const winCells = [
       [0, 1, 2],
       [3, 4, 5],
@@ -50,10 +50,10 @@ const game = (function () {
 
     for (const arr of winCells) {
       if (arr.every((cell) => gameBoard[cell] === 'X')) {
-        console.log(`the winner is ${currentPlayer.name}`);
+        display.displayEndingModal(currentPlayer.name);
       }
       if (arr.every((cell) => gameBoard[cell] === 'O')) {
-        console.log(`the winner is ${currentPlayer.name}`);
+        display.displayEndingModal(currentPlayer.name);
       }
     }
   };
@@ -61,10 +61,24 @@ const game = (function () {
   return {
     changePlayer,
     addSignToCell,
-    gameWinner,
+    checkCells,
     gameCell,
     gameBoard,
   };
+})();
+
+const display = (function () {
+  const submitName = document.querySelector('[name="player-form"]');
+  const winnerModal = document.querySelector('.winner-modal');
+  const btnRestart = document.querySelector('.restart');
+  const btnNewGame = document.querySelector('.new-game');
+
+  const displayEndingModal = function (winner) {
+    winnerModal.classList.remove('hidden');
+    winnerModal.children[0].textContent = `${winner} WIN the game!`;
+  };
+
+  return { displayEndingModal };
 })();
 
 const player = function () {
