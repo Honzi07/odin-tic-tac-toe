@@ -78,7 +78,15 @@ const display = (function () {
     winnerModal.children[0].textContent = `${winner} WIN the game!`;
   };
 
-  return { displayEndingModal };
+  const restartGame = function () {
+    game.gameCell.forEach((cell) => (cell.innerText = ''));
+    game.gameBoard.length = 0;
+    winnerModal.classList.add('hidden');
+  };
+
+  btnRestart.addEventListener('click', restartGame);
+
+  return { displayEndingModal, submitName };
 })();
 
 const player = function () {
