@@ -2,7 +2,7 @@
 
 const game = (function () {
   const gameCell = document.querySelectorAll('.game-cell');
-  const gameBoard = [];
+  const gameBoard = ['', '', '', '', '', '', '', '', ''];
   let currentPlayer;
 
   const changePlayer = function (player1, player2) {
@@ -56,6 +56,11 @@ const game = (function () {
         display.displayEndingModal(currentPlayer.name);
       }
     }
+    if (
+      gameBoard.every((cell) => cell !== '' || cell === 'X' || cell === 'O')
+    ) {
+      display.displayEndingModalDraw();
+    }
   };
 
   return {
@@ -78,6 +83,11 @@ const display = (function () {
     winnerModal.children[0].textContent = `${winner} WIN the game!`;
   };
 
+  const displayEndingModalDraw = function () {
+    winnerModal.classList.remove('hidden');
+    winnerModal.children[0].textContent = 'The game is draw!';
+  };
+
   const restartGame = function () {
     game.gameCell.forEach((cell) => (cell.innerText = ''));
     game.gameBoard.length = 0;
@@ -86,7 +96,7 @@ const display = (function () {
 
   btnRestart.addEventListener('click', restartGame);
 
-  return { displayEndingModal, submitName };
+  return { displayEndingModal, displayEndingModalDraw, submitName };
 })();
 
 const player = function () {
