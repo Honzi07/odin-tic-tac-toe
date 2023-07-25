@@ -35,6 +35,7 @@ const game = (function () {
   };
 
   const checkCells = function () {
+    let gameOver = false;
     const winCells = [
       [0, 1, 2],
       [3, 4, 5],
@@ -51,14 +52,15 @@ const game = (function () {
     for (const arr of winCells) {
       if (arr.every((cell) => gameBoard[cell] === 'X')) {
         display.displayEndingModal(currentPlayer.name);
-      }
-      if (arr.every((cell) => gameBoard[cell] === 'O')) {
+        gameOver = true;
+        break;
+      } else if (arr.every((cell) => gameBoard[cell] === 'O')) {
         display.displayEndingModal(currentPlayer.name);
+        gameOver = true;
+        break;
       }
     }
-    if (
-      gameBoard.every((cell) => cell !== '' || cell === 'X' || cell === 'O')
-    ) {
+    if (!gameOver && gameBoard.every((cell) => cell !== '')) {
       display.displayEndingModalDraw();
     }
   };
