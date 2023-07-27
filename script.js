@@ -1,5 +1,8 @@
 'use strict';
 
+let player1;
+let player2;
+
 const game = (function () {
   const gameCell = document.querySelectorAll('.game-cell');
   const gameBoard = ['', '', '', '', '', '', '', '', ''];
@@ -15,6 +18,10 @@ const game = (function () {
       })
     );
     addSignToCell();
+  };
+
+  const changeCurrentPlayer = function (player1) {
+    currentPlayer = player1;
   };
 
   const addSignToCell = function () {
@@ -69,6 +76,7 @@ const game = (function () {
     changePlayer,
     addSignToCell,
     checkCells,
+    changeCurrentPlayer,
     gameCell,
     gameBoard,
   };
@@ -92,7 +100,8 @@ const display = (function () {
 
   const restartGame = function () {
     game.gameCell.forEach((cell) => (cell.innerText = ''));
-    game.gameBoard.length = 0;
+    game.gameBoard.splice(0, Infinity, '', '', '', '', '', '', '', '', '');
+    game.changeCurrentPlayer();
     winnerModal.classList.add('hidden');
   };
 
@@ -118,8 +127,8 @@ const player = function () {
       const player1Name = e.currentTarget.player1.value || 'player1';
       const player2Name = e.currentTarget.player2.value || 'player2';
 
-      const player1 = createPlayer(player1Name, 'X');
-      const player2 = createPlayer(player2Name, 'O');
+      player1 = createPlayer(player1Name, 'X');
+      player2 = createPlayer(player2Name, 'O');
 
       game.changePlayer(player1, player2);
     });
