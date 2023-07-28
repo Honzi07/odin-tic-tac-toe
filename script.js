@@ -15,6 +15,8 @@ const game = (function () {
 
         currentPlayer = currentPlayer === player1 ? player2 : player1;
         console.log(currentPlayer);
+
+        display.colorSign(currentPlayer, cell);
       })
     );
     addSignToCell();
@@ -99,7 +101,10 @@ const display = (function () {
   };
 
   const restartGame = function () {
-    game.gameCell.forEach((cell) => (cell.innerText = ''));
+    game.gameCell.forEach((cell) => {
+      cell.innerText = '';
+      cell.classList.remove('X', 'O');
+    });
     game.gameBoard.splice(0, Infinity, '', '', '', '', '', '', '', '', '');
     game.changeCurrentPlayer();
     winnerModal.classList.add('hidden');
@@ -111,11 +116,23 @@ const display = (function () {
     restartGame();
   };
 
+  const colorSign = function (player, cell) {
+    console.log(game.gameCell);
+    if (player.sign === 'X') {
+      cell.classList.add('X');
+      console.log('X');
+    }
+    if (player.sign === 'O') {
+      cell.classList.add('O');
+      console.log('O');
+    }
+  };
+
   btnRestart.addEventListener('click', restartGame);
 
   btnNewGame.addEventListener('click', newGame);
 
-  return { displayEndingModal, displayEndingModalDraw, submitName };
+  return { displayEndingModal, displayEndingModalDraw, colorSign, submitName };
 })();
 
 const player = function () {
