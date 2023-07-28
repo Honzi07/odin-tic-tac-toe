@@ -52,3 +52,11 @@ footer {
 .hidden {
   display: none;
 }
+
+.X {
+  color: red;
+}
+
+.O {
+  color: blue;
+}
