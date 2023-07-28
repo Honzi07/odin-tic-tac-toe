@@ -8,7 +8,7 @@ const game = (function () {
   const gameBoard = ['', '', '', '', '', '', '', '', ''];
   let currentPlayer;
 
-  const changePlayer = function (player1, player2) {
+  const changePlayer = function () {
     gameCell.forEach((cell) =>
       cell.addEventListener('click', function (e) {
         if (e.target.innerText) return;
@@ -105,12 +105,23 @@ const display = (function () {
     winnerModal.classList.add('hidden');
   };
 
+  const newGame = function () {
+    submitName[0].value = submitName[1].value = '';
+    submitName[0].focus();
+    restartGame();
+  };
+
   btnRestart.addEventListener('click', restartGame);
+
+  btnNewGame.addEventListener('click', newGame);
 
   return { displayEndingModal, displayEndingModalDraw, submitName };
 })();
 
 const player = function () {
+  let player1Name;
+  let player2Name;
+
   const createPlayer = function (name, sign) {
     return {
       name,
@@ -120,12 +131,11 @@ const player = function () {
 
   const namePlayer = function () {
     const submitName = document.querySelector('[name="player-form"]');
-
     submitName.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      const player1Name = e.currentTarget.player1.value || 'player1';
-      const player2Name = e.currentTarget.player2.value || 'player2';
+      player1Name = e.currentTarget.player1.value || 'player1';
+      player2Name = e.currentTarget.player2.value || 'player2';
 
       player1 = createPlayer(player1Name, 'X');
       player2 = createPlayer(player2Name, 'O');
