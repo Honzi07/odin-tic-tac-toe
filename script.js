@@ -91,6 +91,8 @@ const display = (function () {
   const btnRestart = document.querySelector('.restart');
   const btnNewGame = document.querySelector('.new-game');
   const displayPlayer = document.querySelector('.display-player');
+  const gameBoard = document.querySelector('.game-board');
+  const btnStart = submitName[2];
 
   const displayCurrentPlayer = function (player) {
     const currentPlayerName = displayPlayer.children[0];
@@ -132,6 +134,7 @@ const display = (function () {
   const newGame = function () {
     submitName[0].value = submitName[1].value = '';
     submitName[0].focus();
+    submitName.classList.remove('hidden');
     restartGame();
   };
 
@@ -146,6 +149,11 @@ const display = (function () {
       console.log('O');
     }
   };
+
+  btnStart.addEventListener('click', function () {
+    gameBoard.classList.remove('hidden');
+    submitName.classList.add('hidden');
+  });
 
   btnRestart.addEventListener('click', function () {
     restartGame();
