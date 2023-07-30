@@ -17,6 +17,7 @@ const game = (function () {
         console.log(currentPlayer);
 
         display.colorSign(currentPlayer, cell);
+        display.displayCurrentPlayer(currentPlayer);
       })
     );
     addSignToCell();
@@ -89,6 +90,24 @@ const display = (function () {
   const winnerModal = document.querySelector('.winner-modal');
   const btnRestart = document.querySelector('.restart');
   const btnNewGame = document.querySelector('.new-game');
+  const displayPlayer = document.querySelector('.display-player');
+
+  const displayCurrentPlayer = function (player) {
+    const currentPlayerName = displayPlayer.children[0];
+    const currentPlayerSign = displayPlayer.children[1];
+
+    if (player === player1) {
+      currentPlayerName.textContent = player2.name;
+      currentPlayerSign.textContent = player2.sign;
+      currentPlayerSign.classList.add('O');
+      currentPlayerSign.classList.remove('X');
+    } else {
+      currentPlayerName.textContent = player1.name;
+      currentPlayerSign.textContent = player1.sign;
+      currentPlayerSign.classList.add('X');
+      currentPlayerSign.classList.remove('O');
+    }
+  };
 
   const displayEndingModal = function (winner) {
     winnerModal.classList.remove('hidden');
@@ -128,11 +147,20 @@ const display = (function () {
     }
   };
 
-  btnRestart.addEventListener('click', restartGame);
+  btnRestart.addEventListener('click', function () {
+    restartGame();
+    displayCurrentPlayer();
+  });
 
   btnNewGame.addEventListener('click', newGame);
 
-  return { displayEndingModal, displayEndingModalDraw, colorSign, submitName };
+  return {
+    displayCurrentPlayer,
+    displayEndingModal,
+    displayEndingModalDraw,
+    colorSign,
+    submitName,
+  };
 })();
 
 const player = function () {
@@ -156,6 +184,8 @@ const player = function () {
 
       player1 = createPlayer(player1Name, 'X');
       player2 = createPlayer(player2Name, 'O');
+
+      display.displayCurrentPlayer(player2);
 
       game.changePlayer(player1, player2);
     });
