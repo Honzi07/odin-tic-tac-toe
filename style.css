@@ -1,28 +1,112 @@
 :root {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --main-background: #ffffff;
+  --background-gradient: linear-gradient(
+    to right top,
+    #432c7a,
+    #523383,
+    #623a8b,
+    #714194,
+    #80489c
+  );
 }
 
 body {
-  display: grid;
-  grid-template-columns: auto;
-  grid-template-rows: 1fr auto;
-  grid-template-areas:
-    'main'
-    'footer';
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--background-gradient);
   height: 100vh;
 }
 
 main {
-  grid-area: main;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.modal-content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--main-background);
+  border: 1px solid black;
+  border-radius: 8px;
+  box-shadow: 4px 4px 7px 3px rgba(0, 0, 0, 0.3);
+  padding: 30px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+input {
+  appearance: none;
+  border-radius: 8px;
+  padding-left: 5px;
+  max-width: 200px;
+}
+
+input:hover,
+input:focus {
+  background-color: #ecf9ff;
+}
+
+form span {
+  font-size: 2rem;
+}
+
+form > div {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+form button {
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  padding: 10px 30px;
+}
+
+form button:hover {
+  background-color: #ecf9ff;
+  transform: translateY(-3px);
+  box-shadow: 4px 4px 7px 3px rgba(0, 0, 0, 0.3);
+}
+
 footer {
-  grid-area: footer;
-  background-color: darkslateblue;
+  display: flex;
+  align-items: center;
+  margin-top: 30px;
+}
+
+footer > p {
+  margin-right: 10px;
+}
+
+svg:hover {
+  transform: scale(1.1);
 }
 
 .game-board {
