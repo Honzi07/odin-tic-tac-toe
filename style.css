@@ -20,9 +20,11 @@ body {
 }
 
 main {
-  display: flex;
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
+  display: grid;
+  justify-content: center;
 }
 
 .modal {
@@ -117,8 +119,10 @@ svg:hover {
   display: grid;
   grid-template-columns: repeat(3, minmax(100px, 200px));
   grid-template-rows: repeat(3, minmax(100px, 200px));
+  gap: 8px;
   aspect-ratio: 1/1;
-  background-color: lightgreen;
+  background-color: #424242;
+  border-radius: 20px;
 }
 
 .game-cell {
@@ -126,7 +130,9 @@ svg:hover {
   justify-content: center;
   align-content: center;
   flex-wrap: wrap;
-  border: 2px solid black;
+  border-radius: 8px;
+  background-color: #f5eaea;
+  /* border: 2px solid black; */
   font-size: 6rem;
 }
 
@@ -142,9 +148,9 @@ svg:hover {
 }
 
 .X {
-  color: red;
+  color: #ffb84c;
 }
 
 .O {
-  color: blue;
+  color: #f16767;
 }
