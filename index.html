@@ -10,10 +10,10 @@
   </head>
   <body>
     <main>
-      <div class="modal">
+      <dialog class="modal">
         <div class="modal-content">
           <form action="" name="player-form">
-            <div>
+            <fieldset>
               <label for="player1">Player1</label>
               <input
                 type="text"
@@ -22,8 +22,8 @@
                 placeholder="change name"
               />
               <span class="X">X</span>
-            </div>
-            <div>
+            </fieldset>
+            <fieldset>
               <label for="player2">Player2</label>
               <input
                 type="text"
@@ -32,7 +32,7 @@
                 placeholder="change name"
               />
               <span class="O">O</span>
-            </div>
+            </fieldset>
             <div>
               <button type="submit">Start</button>
             </div>
@@ -57,7 +57,7 @@
             </a>
           </footer>
         </div>
-      </div>
+      </dialog>
 
       <div class="display-player hidden"><span></span><span></span></div>
       <div class="game-board hidden">

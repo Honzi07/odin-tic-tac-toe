@@ -92,7 +92,8 @@ const display = (function () {
   const btnNewGame = document.querySelector('.new-game');
   const displayPlayer = document.querySelector('.display-player');
   const gameBoard = document.querySelector('.game-board');
-  const btnStart = submitName[2];
+  const modal = document.querySelector('.modal');
+  const btnStart = submitName[4];
 
   const displayCurrentPlayer = function (player) {
     const currentPlayerName = displayPlayer.children[0];
@@ -132,10 +133,10 @@ const display = (function () {
   };
 
   const newGame = function () {
-    submitName[0].value = submitName[1].value = '';
-    submitName[0].focus();
-    submitName.classList.remove('hidden');
     restartGame();
+    modal.classList.remove('hidden');
+    submitName[1].value = submitName[3].value = '';
+    submitName[1].focus();
   };
 
   const colorSign = function (player, cell) {
@@ -152,7 +153,7 @@ const display = (function () {
 
   btnStart.addEventListener('click', function () {
     gameBoard.classList.remove('hidden');
-    submitName.classList.add('hidden');
+    modal.classList.add('hidden');
   });
 
   btnRestart.addEventListener('click', function () {

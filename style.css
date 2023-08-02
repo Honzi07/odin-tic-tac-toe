@@ -29,14 +29,16 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+  /* position: fixed; */
+  background-color: transparent;
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
+  border-style: none;
+  /* left: 0;
+  top: 0; */
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 
 .modal-content {
@@ -49,6 +51,7 @@ main {
   border-radius: 8px;
   box-shadow: 4px 4px 7px 3px rgba(0, 0, 0, 0.3);
   padding: 30px;
+  z-index: 2;
 }
 
 form {
@@ -75,7 +78,8 @@ form span {
   font-size: 2rem;
 }
 
-form > div {
+fieldset {
+  border-style: none;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -91,7 +95,7 @@ form button {
 
 form button:hover {
   background-color: #ecf9ff;
-  transform: translateY(-3px);
+  transform: translateY(-8px) scale(1.1);
   box-shadow: 4px 4px 7px 3px rgba(0, 0, 0, 0.3);
 }
 
