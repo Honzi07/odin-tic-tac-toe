@@ -115,6 +115,30 @@ svg:hover {
   transform: scale(1.1);
 }
 
+.display-player {
+  display: flex;
+  justify-content: space-evenly;
+  background-color: #424242;
+  border: 5px solid #f5eaea;
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  color: #f5eaea;
+  font-size: 2rem;
+  font-weight: 500;
+  /* padding: 20px; */
+  /* max-width: 300px; */
+}
+
+.display-player span {
+  padding: 10px 0;
+}
+
+.line {
+  background-color: #f5eaea;
+  height: 100%;
+  width: 5px;
+}
+
 .game-board {
   display: grid;
   grid-template-columns: repeat(3, minmax(100px, 200px));
@@ -134,6 +158,14 @@ svg:hover {
   background-color: #f5eaea;
   /* border: 2px solid black; */
   font-size: 6rem;
+}
+
+[data-index='0'] {
+  border-top-left-radius: 0;
+}
+
+[data-index='2'] {
+  border-top-right-radius: 0;
 }
 
 .winner-modal {
