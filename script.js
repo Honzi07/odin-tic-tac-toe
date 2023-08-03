@@ -94,10 +94,11 @@ const display = (function () {
   const gameBoard = document.querySelector('.game-board');
   const modal = document.querySelector('.modal');
   const btnStart = submitName[4];
+  const gameOverText = winnerModal.children[0].children[0];
 
   const displayCurrentPlayer = function (player) {
     const currentPlayerName = displayPlayer.children[0];
-    const currentPlayerSign = displayPlayer.children[1];
+    const currentPlayerSign = displayPlayer.children[2];
 
     if (player === player1) {
       currentPlayerName.textContent = player2.name;
@@ -114,12 +115,12 @@ const display = (function () {
 
   const displayEndingModal = function (winner) {
     winnerModal.classList.remove('hidden');
-    winnerModal.children[0].textContent = `${winner} WIN the game!`;
+    gameOverText.textContent = `${winner} WIN the game!`;
   };
 
   const displayEndingModalDraw = function () {
     winnerModal.classList.remove('hidden');
-    winnerModal.children[0].textContent = 'The game is draw!';
+    gameOverText.textContent = 'The game is draw!';
   };
 
   const restartGame = function () {
