@@ -14,7 +14,6 @@ const game = (function () {
         if (e.target.innerText) return;
 
         currentPlayer = currentPlayer === player1 ? player2 : player1;
-        console.log(currentPlayer);
 
         display.colorSign(currentPlayer, cell);
         display.displayCurrentPlayer(currentPlayer);
@@ -37,8 +36,6 @@ const game = (function () {
         }
 
         e.target.innerText = gameBoard[i];
-        console.log(currentPlayer);
-        console.log(gameBoard);
         checkCells();
       })
     );
@@ -56,8 +53,6 @@ const game = (function () {
       [0, 4, 8],
       [2, 4, 6],
     ];
-
-    console.log(currentPlayer);
 
     for (const arr of winCells) {
       if (arr.every((cell) => gameBoard[cell] === 'X')) {
@@ -155,14 +150,11 @@ const display = (function () {
   };
 
   const colorSign = function (player, cell) {
-    console.log(game.gameCell);
     if (player.sign === 'X') {
       cell.classList.add('X');
-      console.log('X');
     }
     if (player.sign === 'O') {
       cell.classList.add('O');
-      console.log('O');
     }
   };
 
