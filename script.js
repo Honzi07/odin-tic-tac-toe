@@ -61,10 +61,12 @@ const game = (function () {
 
     for (const arr of winCells) {
       if (arr.every((cell) => gameBoard[cell] === 'X')) {
+        display.colorGameOverText(currentPlayer);
         display.displayEndingModal(currentPlayer.name);
         gameOver = true;
         break;
       } else if (arr.every((cell) => gameBoard[cell] === 'O')) {
+        display.colorGameOverText(currentPlayer);
         display.displayEndingModal(currentPlayer.name);
         gameOver = true;
         break;
@@ -87,14 +89,15 @@ const game = (function () {
 
 const display = (function () {
   const submitName = document.querySelector('[name="player-form"]');
+  const btnStart = submitName[4];
   const winnerModal = document.querySelector('.winner-modal');
   const btnRestart = document.querySelector('.restart');
   const btnNewGame = document.querySelector('.new-game');
   const displayPlayer = document.querySelector('.display-player');
   const gameBoard = document.querySelector('.game-board');
   const modal = document.querySelector('.modal');
-  const btnStart = submitName[4];
-  const gameOverText = winnerModal.children[0].children[0];
+  const gameOverTextWinner = document.querySelector('.game-over-text-winner');
+  const gameOverText = document.querySelector('.game-over-text');
 
   const displayCurrentPlayer = function (player) {
     const currentPlayerName = displayPlayer.children[0];
@@ -113,9 +116,19 @@ const display = (function () {
     }
   };
 
+  const colorGameOverText = function (winner) {
+    if (winner === player1) {
+      gameOverTextWinner.classList.add('X');
+    }
+    if (winner === player2) {
+      gameOverTextWinner.classList.add('O');
+    }
+  };
+
   const displayEndingModal = function (winner) {
     winnerModal.classList.remove('hidden');
-    gameOverText.textContent = `${winner} WIN the game!`;
+    gameOverTextWinner.textContent = `${winner} WIN`;
+    gameOverText.textContent = 'the game!';
   };
 
   const displayEndingModalDraw = function () {
@@ -131,6 +144,7 @@ const display = (function () {
     game.gameBoard.splice(0, Infinity, '', '', '', '', '', '', '', '', '');
     game.changeCurrentPlayer();
     winnerModal.classList.add('hidden');
+    gameOverTextWinner.classList.remove('X', 'O');
   };
 
   const newGame = function () {
@@ -169,6 +183,7 @@ const display = (function () {
     displayEndingModal,
     displayEndingModalDraw,
     colorSign,
+    colorGameOverText,
     submitName,
   };
 })();
