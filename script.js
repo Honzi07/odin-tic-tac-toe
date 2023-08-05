@@ -5,7 +5,7 @@ let player2;
 
 const game = (function () {
   const gameCell = document.querySelectorAll('.game-cell');
-  const gameBoard = ['', '', '', '', '', '', '', '', ''];
+  const gameBoard = [0, 1, 2, 3, 4, 5, 6, 7, 8];
   let currentPlayer;
 
   const changePlayer = function () {
@@ -72,11 +72,92 @@ const game = (function () {
     }
   };
 
+  const AIcheckEmptyCell = function (board) {
+    return board.filter((cell) => cell != 'O' && cell != 'X');
+  };
+
+  const AIcheckCells = function (newBoard, player) {
+    const winCells = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    for (const arr of winCells) {
+      if (arr.every((cell) => newBoard[cell] === player.sign)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+
+  const AIminimax = function (newBoard, player) {
+    let emptyCellArr = AIcheckEmptyCell(newBoard);
+
+    if (AIcheckCells(newBoard, player1)) {
+      return { score: -10 };
+    } else if (AIcheckCells(newBoard, player2)) {
+      return { score: 10 };
+    } else if (emptyCellArr.length === 0) {
+      return { score: 0 };
+    }
+
+    const moves = [];
+
+    for (const cell of emptyCellArr) {
+      const move = {};
+      move.index = newBoard[emptyCellArr[cell]];
+
+      newBoard[emptyCellArr[cell]] = player;
+
+      if (player === player2) {
+        let result = AIminimax(newBoard, player1);
+        move.score = result.score;
+      } else {
+        let result = AIminimax(newBoard, player2);
+        move.score = result.score;
+      }
+
+      newBoard[emptyCellArr[cell]] = move.index;
+      moves.push(move);
+    }
+
+    let bestMove;
+
+    if (player === player2) {
+      let bestScore = -Infinity;
+      for (const i of moves) {
+        if (moves[i].score > bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    } else {
+      let bestScore = Infinity;
+      for (const i of moves) {
+        if (moves[i].score < bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    }
+    return moves[bestMove];
+  };
+
   return {
     changePlayer,
     addSignToCell,
     checkCells,
     changeCurrentPlayer,
+    AIcheckEmptyCell,
+    AIcheckCells,
+    AIminimax,
     gameCell,
     gameBoard,
   };
@@ -136,7 +217,7 @@ const display = (function () {
       cell.innerText = '';
       cell.classList.remove('X', 'O');
     });
-    game.gameBoard.splice(0, Infinity, '', '', '', '', '', '', '', '', '');
+    game.gameBoard.splice(0, Infinity, 0, 1, 2, 3, 4, 5, 6, 7, 8);
     game.changeCurrentPlayer();
     winnerModal.classList.add('hidden');
     gameOverTextWinner.classList.remove('X', 'O');
