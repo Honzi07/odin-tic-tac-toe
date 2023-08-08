@@ -6,6 +6,16 @@ let player2;
 const game = (function () {
   const gameCell = document.querySelectorAll('.game-cell');
   const gameBoard = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  const winCells = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
   let currentPlayer;
 
   const changePlayer = function () {
@@ -14,6 +24,7 @@ const game = (function () {
         if (e.target.innerText) return;
 
         currentPlayer = currentPlayer === player1 ? player2 : player1;
+        console.log(currentPlayer);
 
         display.colorSign(currentPlayer, cell);
         display.displayCurrentPlayer(currentPlayer);
@@ -31,11 +42,13 @@ const game = (function () {
       cell.addEventListener('click', function (e) {
         const i = e.target.dataset.index;
 
-        if (!gameBoard[i]) {
+        if (typeof gameBoard[i] === 'number') {
           gameBoard[i] = currentPlayer.sign;
         }
 
         e.target.innerText = gameBoard[i];
+        console.log(currentPlayer);
+        console.log(gameBoard);
         checkCells();
       })
     );
@@ -43,16 +56,6 @@ const game = (function () {
 
   const checkCells = function () {
     let gameOver = false;
-    const winCells = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
 
     for (const arr of winCells) {
       if (arr.every((cell) => gameBoard[cell] === 'X')) {
@@ -67,7 +70,7 @@ const game = (function () {
         break;
       }
     }
-    if (!gameOver && gameBoard.every((cell) => cell !== '')) {
+    if (!gameOver && gameBoard.every((cell) => typeof cell !== 'number')) {
       display.displayEndingModalDraw();
     }
   };
@@ -76,28 +79,16 @@ const game = (function () {
     return board.filter((cell) => cell != 'O' && cell != 'X');
   };
 
-  const AIcheckCells = function (newBoard, player) {
-    const winCells = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
-
+  const AIcheckCells = function (board, player) {
     for (const arr of winCells) {
-      if (arr.every((cell) => newBoard[cell] === player.sign)) {
+      if (arr.every((cell) => board[cell] === player.sign)) {
         return true;
-      } else {
-        return false;
       }
     }
+    return false;
   };
 
-  const AIminimax = function (newBoard, player) {
+  const AIminimax = function (newBoard, currentPlayer) {
     let emptyCellArr = AIcheckEmptyCell(newBoard);
 
     if (AIcheckCells(newBoard, player1)) {
@@ -110,44 +101,41 @@ const game = (function () {
 
     const moves = [];
 
-    for (const cell of emptyCellArr) {
+    for (const index of emptyCellArr) {
       const move = {};
-      move.index = newBoard[emptyCellArr[cell]];
+      move.index = index;
 
-      newBoard[emptyCellArr[cell]] = player;
+      const newBoardCopy = [...newBoard];
+      newBoardCopy[index] = currentPlayer.sign;
 
-      if (player === player2) {
-        let result = AIminimax(newBoard, player1);
-        move.score = result.score;
-      } else {
-        let result = AIminimax(newBoard, player2);
-        move.score = result.score;
-      }
+      let result = AIminimax(
+        newBoardCopy,
+        currentPlayer === player1 ? player2 : player1
+      );
+      move.score = result.score;
 
-      newBoard[emptyCellArr[cell]] = move.index;
       moves.push(move);
     }
 
     let bestMove;
-
-    if (player === player2) {
+    if (currentPlayer === player2) {
       let bestScore = -Infinity;
-      for (const i of moves) {
-        if (moves[i].score > bestScore) {
-          bestScore = moves[i].score;
-          bestMove = i;
+      for (const move of moves) {
+        if (move.score > bestScore) {
+          bestScore = move.score;
+          bestMove = move;
         }
       }
     } else {
       let bestScore = Infinity;
-      for (const i of moves) {
-        if (moves[i].score < bestScore) {
-          bestScore = moves[i].score;
-          bestMove = i;
+      for (const move of moves) {
+        if (move.score < bestScore) {
+          bestScore = move.score;
+          bestMove = move;
         }
       }
     }
-    return moves[bestMove];
+    return bestMove;
   };
 
   return {
@@ -164,8 +152,8 @@ const game = (function () {
 })();
 
 const display = (function () {
-  const submitName = document.querySelector('[name="player-form"]');
-  const btnStart = submitName[4];
+  const submitNameVsAI = document.querySelector('[name="cpu-form"]');
+  const btnStart = submitNameVsAI[2];
   const winnerModal = document.querySelector('.winner-modal');
   const btnRestart = document.querySelector('.restart');
   const btnNewGame = document.querySelector('.new-game');
@@ -231,6 +219,7 @@ const display = (function () {
   };
 
   const colorSign = function (player, cell) {
+    // console.log(game.gameCell);
     if (player.sign === 'X') {
       cell.classList.add('X');
     }
@@ -257,7 +246,6 @@ const display = (function () {
     displayEndingModalDraw,
     colorSign,
     colorGameOverText,
-    submitName,
   };
 })();
 
@@ -272,24 +260,41 @@ const player = function () {
     };
   };
 
-  const namePlayer = function () {
-    const submitName = document.querySelector('[name="player-form"]');
-    submitName.addEventListener('submit', function (e) {
+  const AInaming = function () {
+    const submitNameVsAI = document.querySelector('[name="cpu-form"]');
+
+    submitNameVsAI.addEventListener('submit', function (e) {
       e.preventDefault();
 
       player1Name = e.currentTarget.player1.value || 'player1';
-      player2Name = e.currentTarget.player2.value || 'player2';
 
       player1 = createPlayer(player1Name, 'X');
-      player2 = createPlayer(player2Name, 'O');
+      player2 = createPlayer('computer', 'O');
 
       display.displayCurrentPlayer(player2);
 
       game.changePlayer(player1, player2);
     });
   };
-  return { createPlayer, namePlayer };
+
+  // const namePlayer = function () {
+  //   const submitName = document.querySelector('[name="player-form"]');
+  //   submitName.addEventListener('submit', function (e) {
+  //     e.preventDefault();
+
+  //     player1Name = e.currentTarget.player1.value || 'player1';
+  //     player2Name = e.currentTarget.player2.value || 'player2';
+
+  //     player1 = createPlayer(player1Name, 'X');
+  //     player2 = createPlayer(player2Name, 'O');
+
+  //     display.displayCurrentPlayer(player2);
+
+  //     game.changePlayer(player1, player2);
+  //   });
+  // };
+  return { createPlayer, AInaming };
 };
 
 const initGame = player();
-initGame.namePlayer();
+initGame.AInaming();
