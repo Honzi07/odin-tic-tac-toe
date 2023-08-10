@@ -1,6 +1,5 @@
 :root {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: calc(60% + 0.8vmin);
   --accent: #f1656528;
   --main-background: #f4f0f0;
   --secondary-dark: #424242;
@@ -25,6 +24,7 @@ body {
 main {
   display: grid;
   justify-content: center;
+  font-size: calc(60% + 0.8vmin);
 }
 
 .modal {
@@ -56,8 +56,6 @@ main {
 
 .select-mode {
   display: flex;
-  /* flex-wrap: wrap; */
-  /* max-width: 500px; */
   padding: 0;
 }
 
@@ -65,9 +63,6 @@ main {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  /* flex-direction: column; */
-  /* align-items: center; */
-  /* margin: 30px; */
 }
 
 .select-mode > div div {
@@ -82,16 +77,9 @@ main {
   transition-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045);
 }
 
-.select-mode button:hover {
-  cursor: pointer;
-  background-color: var(--accent);
-  transform: translateY(-8px) scale(1.1);
-  box-shadow: 4px 4px 7px 3px rgba(0, 0, 0, 0.3);
-}
-
 .select-mode p:not(footer > p) {
   margin-top: 10px;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 500;
   text-align: center;
 }
@@ -153,9 +141,11 @@ form button,
   padding: 10px 30px;
 }
 
+.select-mode button:hover,
 form button:hover,
 .winner-modal button:hover {
   background-color: var(--accent);
+  cursor: pointer;
   transform: translateY(-8px) scale(1.1);
   box-shadow: 4px 4px 7px 3px rgba(0, 0, 0, 0.3);
 }
@@ -168,7 +158,7 @@ form button:hover,
   border-bottom: 0;
   border-radius: 8px 8px 0 0;
   color: var(--main-background);
-  font-size: 2rem;
+  font-size: 2em;
   font-weight: 500;
 }
 
@@ -199,7 +189,7 @@ form button:hover,
   flex-wrap: wrap;
   border-radius: 8px;
   background-color: var(--main-background);
-  font-size: 8rem;
+  font-size: 8em;
 }
 
 [data-index='0'] {
