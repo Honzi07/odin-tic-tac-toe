@@ -28,6 +28,7 @@ const game = (function () {
 
         display.colorSign(currentPlayer, cell);
         display.displayCurrentPlayer(currentPlayer);
+        // AIplay(currentPlayer);
       })
     );
     addSignToCell();
@@ -138,6 +139,15 @@ const game = (function () {
     return bestMove;
   };
 
+  // const AIplay = function (currentPlayer) {
+  //   if (currentPlayer === player2) {
+  //     const { index } = AIminimax(gameBoard, player2);
+  //     gameBoard[index] = currentPlayer.sign;
+  //     gameCell[index].innerText = currentPlayer.sign;
+  //     console.log(index);
+  //   }
+  // };
+
   return {
     changePlayer,
     addSignToCell,
@@ -146,20 +156,24 @@ const game = (function () {
     AIcheckEmptyCell,
     AIcheckCells,
     AIminimax,
+    // AIplay,
     gameCell,
     gameBoard,
   };
 })();
 
 const display = (function () {
-  const submitNameVsAI = document.querySelector('[name="cpu-form"]');
-  const btnStart = submitNameVsAI[2];
+  const btnAi = document.querySelector('.ai-button');
+  const btnPvp = document.querySelector('.pvp-button');
+  const modeModal = document.querySelector('.mode-modal');
+  const submitName = document.querySelector('[name="player-form"]');
+  const btnStart = submitName[4];
   const winnerModal = document.querySelector('.winner-modal');
   const btnRestart = document.querySelector('.restart');
   const btnNewGame = document.querySelector('.new-game');
   const displayPlayer = document.querySelector('.display-player');
-  const gameBoard = document.querySelector('.game-board');
-  const modal = document.querySelector('.modal');
+  // const gameBoard = document.querySelector('.game-board');
+  const inputModal = document.querySelector('.input-modal');
   const gameOverTextWinner = document.querySelector('.game-over-text-winner');
   const gameOverText = document.querySelector('.game-over-text');
 
@@ -213,9 +227,8 @@ const display = (function () {
 
   const newGame = function () {
     restartGame();
-    modal.classList.remove('hidden');
+    modeModal.classList.remove('hidden');
     submitName[1].value = submitName[3].value = '';
-    submitName[1].focus();
   };
 
   const colorSign = function (player, cell) {
@@ -228,9 +241,26 @@ const display = (function () {
     }
   };
 
+  btnAi.addEventListener('click', function () {
+    inputModal.classList.remove('hidden');
+    modeModal.classList.add('hidden');
+    const player2Input = document.querySelector('#player2');
+    player2Input.value = 'Computer';
+    player2Input.setAttribute('readonly', '');
+  });
+
+  btnPvp.addEventListener('click', function () {
+    const player2Input = document.querySelector('#player2');
+    inputModal.classList.remove('hidden');
+    modeModal.classList.add('hidden');
+    player2Input.removeAttribute('readonly');
+    player2Input.removeAttribute('value');
+    player2Input.placeholder = 'Change name';
+  });
+
   btnStart.addEventListener('click', function () {
-    gameBoard.classList.remove('hidden');
-    modal.classList.add('hidden');
+    document.querySelector('main').classList.remove('hidden');
+    inputModal.classList.add('hidden');
   });
 
   btnRestart.addEventListener('click', function () {
@@ -260,41 +290,45 @@ const player = function () {
     };
   };
 
-  const AInaming = function () {
-    const submitNameVsAI = document.querySelector('[name="cpu-form"]');
+  // const AInaming = function () {
+  //   const submitNameVsAI = document.querySelector('[name="cpu-form"]');
 
-    submitNameVsAI.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      player1Name = e.currentTarget.player1.value || 'player1';
-
-      player1 = createPlayer(player1Name, 'X');
-      player2 = createPlayer('computer', 'O');
-
-      display.displayCurrentPlayer(player2);
-
-      game.changePlayer(player1, player2);
-    });
-  };
-
-  // const namePlayer = function () {
-  //   const submitName = document.querySelector('[name="player-form"]');
-  //   submitName.addEventListener('submit', function (e) {
+  //   submitNameVsAI.addEventListener('submit', function (e) {
   //     e.preventDefault();
 
   //     player1Name = e.currentTarget.player1.value || 'player1';
-  //     player2Name = e.currentTarget.player2.value || 'player2';
 
   //     player1 = createPlayer(player1Name, 'X');
-  //     player2 = createPlayer(player2Name, 'O');
+  //     player2 = createPlayer('computer', 'O');
 
   //     display.displayCurrentPlayer(player2);
 
   //     game.changePlayer(player1, player2);
   //   });
   // };
-  return { createPlayer, AInaming };
+
+  const namePlayer = function () {
+    const submitName = document.querySelector('[name="player-form"]');
+    submitName.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      player1Name = e.currentTarget.player1.value || 'player1';
+      player2Name = e.currentTarget.player2.value || 'player2';
+
+      player1 = createPlayer(player1Name, 'X');
+      player2 = createPlayer(player2Name, 'O');
+
+      display.displayCurrentPlayer(player2);
+
+      game.changePlayer(player1, player2);
+    });
+  };
+  return { createPlayer, namePlayer };
 };
 
 const initGame = player();
-initGame.AInaming();
+initGame.namePlayer();
+
+const player2Input = document.querySelector('#player2');
+console.dir(player2Input);
+console.log(player2Input.getAttribute('value'));
