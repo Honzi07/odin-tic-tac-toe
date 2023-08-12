@@ -2,6 +2,7 @@
 
 let player1;
 let player2;
+let currentPlayer;
 
 const game = (function () {
   const gameCell = document.querySelectorAll('.game-cell');
@@ -16,43 +17,69 @@ const game = (function () {
     [0, 4, 8],
     [2, 4, 6],
   ];
-  let currentPlayer;
+  // let currentPlayer;
+  let ai = false;
+
+  // const test = function () {
+  //   if (currentPlayer === player1) {
+  //     currentPlayer = player2;
+  //   } else if (currentPlayer === player2) {
+  //     currentPlayer = player1;
+  //   }
+  // };
+
+  // window.addEventListener('click', function () {
+  //   test();
+  //   console.log(currentPlayer);
+  // });
 
   const changePlayer = function () {
-    gameCell.forEach((cell) =>
-      cell.addEventListener('click', function (e) {
-        if (e.target.innerText) return;
+    // if (e.target.innerText) return;
 
-        currentPlayer = currentPlayer === player1 ? player2 : player1;
-        console.log(currentPlayer);
+    if (currentPlayer === player2) {
+      currentPlayer = player1;
+      // console.log(currentPlayer);
+    } else if (currentPlayer === player1) {
+      currentPlayer = player2;
+      // console.log(currentPlayer);
+    }
 
-        display.colorSign(currentPlayer, cell);
-        display.displayCurrentPlayer(currentPlayer);
-        // AIplay(currentPlayer);
-      })
-    );
-    addSignToCell();
+    // if (currentPlayer === player1) {
+    //   AIplay(player2);
+    //   currentPlayer = player1;
+    // }
+    // test();
+    // console.log(currentPlayer);
   };
 
-  const changeCurrentPlayer = function (player1) {
-    currentPlayer = player1;
+  const AIplay = function (player) {
+    // if (ai && player !== player2) return;
+
+    const { index } = AIminimax(gameBoard, player2);
+    gameBoard[index] = player.sign;
+    gameCell[index].innerText = player.sign;
+    // currentPlayer = player2;
+    // addSignToCell();
+    // currentPlayer = player1;
+    console.log(index);
   };
 
-  const addSignToCell = function () {
-    gameCell.forEach((cell) =>
-      cell.addEventListener('click', function (e) {
-        const i = e.target.dataset.index;
+  // const changeCurrentPlayer = function (player1) {
+  //   currentPlayer = player1;
+  // };
 
-        if (typeof gameBoard[i] === 'number') {
-          gameBoard[i] = currentPlayer.sign;
-        }
+  const addSignToCell = function (e) {
+    const i = e.target.dataset.index;
 
-        e.target.innerText = gameBoard[i];
-        console.log(currentPlayer);
-        console.log(gameBoard);
-        checkCells();
-      })
-    );
+    if (typeof gameBoard[i] === 'number') {
+      gameBoard[i] = currentPlayer.sign;
+    }
+    console.log(currentPlayer);
+
+    e.target.innerText = gameBoard[i];
+    // console.log(currentPlayer);
+    console.log(gameBoard);
+    checkCells();
   };
 
   const checkCells = function () {
@@ -139,26 +166,45 @@ const game = (function () {
     return bestMove;
   };
 
-  // const AIplay = function (currentPlayer) {
-  //   if (currentPlayer === player2) {
+  // const AIplay = function (player) {
+  //   if (player === player2) {
   //     const { index } = AIminimax(gameBoard, player2);
-  //     gameBoard[index] = currentPlayer.sign;
-  //     gameCell[index].innerText = currentPlayer.sign;
+  //     gameBoard[index] = player.sign;
+  //     gameCell[index].innerText = player.sign;
   //     console.log(index);
   //   }
   // };
+
+  gameCell.forEach((cell) =>
+    cell.addEventListener('click', function (e) {
+      if (e.target.innerText) return;
+
+      changePlayer();
+      addSignToCell(e);
+      display.colorSign(currentPlayer, cell);
+      display.displayCurrentPlayer(currentPlayer);
+
+      if (ai && currentPlayer === player1) {
+        AIplay(player2);
+      }
+
+      console.log(currentPlayer);
+    })
+  );
 
   return {
     changePlayer,
     addSignToCell,
     checkCells,
-    changeCurrentPlayer,
+    // changeCurrentPlayer,
     AIcheckEmptyCell,
     AIcheckCells,
     AIminimax,
-    // AIplay,
+    AIplay,
     gameCell,
     gameBoard,
+    ai,
+    // test,
   };
 })();
 
@@ -172,7 +218,6 @@ const display = (function () {
   const btnRestart = document.querySelector('.restart');
   const btnNewGame = document.querySelector('.new-game');
   const displayPlayer = document.querySelector('.display-player');
-  // const gameBoard = document.querySelector('.game-board');
   const inputModal = document.querySelector('.input-modal');
   const gameOverTextWinner = document.querySelector('.game-over-text-winner');
   const gameOverText = document.querySelector('.game-over-text');
@@ -220,7 +265,9 @@ const display = (function () {
       cell.classList.remove('X', 'O');
     });
     game.gameBoard.splice(0, Infinity, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-    game.changeCurrentPlayer();
+    // game.changeCurrentPlayer();
+    currentPlayer = player1;
+    displayCurrentPlayer(currentPlayer);
     winnerModal.classList.add('hidden');
     gameOverTextWinner.classList.remove('X', 'O');
   };
@@ -247,6 +294,7 @@ const display = (function () {
     const player2Input = document.querySelector('#player2');
     player2Input.value = 'Computer';
     player2Input.setAttribute('readonly', '');
+    game.ai = true;
   });
 
   btnPvp.addEventListener('click', function () {
@@ -256,6 +304,7 @@ const display = (function () {
     player2Input.removeAttribute('readonly');
     player2Input.removeAttribute('value');
     player2Input.placeholder = 'Change name';
+    game.ai = false;
   });
 
   btnStart.addEventListener('click', function () {
@@ -290,23 +339,6 @@ const player = function () {
     };
   };
 
-  // const AInaming = function () {
-  //   const submitNameVsAI = document.querySelector('[name="cpu-form"]');
-
-  //   submitNameVsAI.addEventListener('submit', function (e) {
-  //     e.preventDefault();
-
-  //     player1Name = e.currentTarget.player1.value || 'player1';
-
-  //     player1 = createPlayer(player1Name, 'X');
-  //     player2 = createPlayer('computer', 'O');
-
-  //     display.displayCurrentPlayer(player2);
-
-  //     game.changePlayer(player1, player2);
-  //   });
-  // };
-
   const namePlayer = function () {
     const submitName = document.querySelector('[name="player-form"]');
     submitName.addEventListener('submit', function (e) {
@@ -320,7 +352,8 @@ const player = function () {
 
       display.displayCurrentPlayer(player2);
 
-      game.changePlayer(player1, player2);
+      // game.changePlayer(player1, player2);
+      currentPlayer = player2;
     });
   };
   return { createPlayer, namePlayer };
@@ -328,7 +361,3 @@ const player = function () {
 
 const initGame = player();
 initGame.namePlayer();
-
-const player2Input = document.querySelector('#player2');
-console.dir(player2Input);
-console.log(player2Input.getAttribute('value'));
