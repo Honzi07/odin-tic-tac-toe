@@ -266,7 +266,7 @@ const display = (function () {
     });
     game.gameBoard.splice(0, Infinity, 0, 1, 2, 3, 4, 5, 6, 7, 8);
     // game.changeCurrentPlayer();
-    currentPlayer = player1;
+    currentPlayer = player2;
     displayCurrentPlayer(currentPlayer);
     winnerModal.classList.add('hidden');
     gameOverTextWinner.classList.remove('X', 'O');
