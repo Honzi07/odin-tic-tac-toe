@@ -36,11 +36,11 @@ const game = (function () {
   const changePlayer = function () {
     // if (e.target.innerText) return;
 
-    if (currentPlayer === player2) {
-      currentPlayer = player1;
-      // console.log(currentPlayer);
-    } else if (currentPlayer === player1) {
+    if (currentPlayer === player1) {
       currentPlayer = player2;
+      // console.log(currentPlayer);
+    } else if (currentPlayer === player2) {
+      currentPlayer = player1;
       // console.log(currentPlayer);
     }
 
@@ -79,7 +79,6 @@ const game = (function () {
     e.target.innerText = gameBoard[i];
     // console.log(currentPlayer);
     console.log(gameBoard);
-    checkCells();
   };
 
   const checkCells = function () {
@@ -179,18 +178,39 @@ const game = (function () {
     cell.addEventListener('click', function (e) {
       if (e.target.innerText) return;
 
-      changePlayer();
+      // if (currentPlayer === player2) {
+      //   AIplay(player2);
+      //   checkCells();
+      //   changePlayer();
+      //   console.log(gameBoard);
+      // }
+
       addSignToCell(e);
       display.colorSign(currentPlayer, cell);
       display.displayCurrentPlayer(currentPlayer);
-
-      if (ai && currentPlayer === player1) {
-        AIplay(player2);
-      }
+      checkCells();
+      changePlayer();
 
       console.log(currentPlayer);
     })
   );
+
+  // gameCell.forEach((cell) =>
+  //   cell.addEventListener('click', function (e) {
+  //     if (e.target.innerText) return;
+
+  //     changePlayer();
+  //     addSignToCell(e);
+  //     display.colorSign(currentPlayer, cell);
+  //     display.displayCurrentPlayer(currentPlayer);
+
+  //     if (ai && currentPlayer === player1) {
+  //       AIplay(player2);
+  //     }
+
+  //     console.log(currentPlayer);
+  //   })
+  // );
 
   return {
     changePlayer,
@@ -226,7 +246,7 @@ const display = (function () {
     const currentPlayerName = displayPlayer.children[0];
     const currentPlayerSign = displayPlayer.children[2];
 
-    if (player === player1) {
+    if (player === player2) {
       currentPlayerName.textContent = player2.name;
       currentPlayerSign.textContent = player2.sign;
       currentPlayerSign.classList.add('O');
@@ -255,6 +275,7 @@ const display = (function () {
   };
 
   const displayEndingModalDraw = function () {
+    gameOverTextWinner.textContent = '';
     winnerModal.classList.remove('hidden');
     gameOverText.textContent = 'The game is draw!';
   };
@@ -266,7 +287,7 @@ const display = (function () {
     });
     game.gameBoard.splice(0, Infinity, 0, 1, 2, 3, 4, 5, 6, 7, 8);
     // game.changeCurrentPlayer();
-    currentPlayer = player2;
+    currentPlayer = player1;
     displayCurrentPlayer(currentPlayer);
     winnerModal.classList.add('hidden');
     gameOverTextWinner.classList.remove('X', 'O');
@@ -350,10 +371,10 @@ const player = function () {
       player1 = createPlayer(player1Name, 'X');
       player2 = createPlayer(player2Name, 'O');
 
-      display.displayCurrentPlayer(player2);
+      currentPlayer = player1;
+      display.displayCurrentPlayer(currentPlayer);
 
       // game.changePlayer(player1, player2);
-      currentPlayer = player2;
     });
   };
   return { createPlayer, namePlayer };
