@@ -3,6 +3,7 @@
 let player1;
 let player2;
 let currentPlayer;
+let ai;
 
 const game = (function () {
   const gameCell = document.querySelectorAll('.game-cell');
@@ -19,7 +20,6 @@ const game = (function () {
   ];
   // let currentPlayer;
   let allowPlayerClicks = true;
-  let ai = true;
 
   // const test = function () {
   //   if (currentPlayer === player1) {
@@ -197,7 +197,7 @@ const game = (function () {
 
   gameCell.forEach((cell) =>
     cell.addEventListener('click', function (e) {
-      if (!allowPlayerClicks || e.target.innerText) return;
+      if ((!allowPlayerClicks && ai) || e.target.innerText) return;
 
       allowPlayerClicks = false;
       let index = e.target.dataset.index;
@@ -253,7 +253,7 @@ const game = (function () {
     AIplay,
     gameCell,
     gameBoard,
-    ai,
+    // ai,
     // test,
   };
 })();
@@ -361,7 +361,7 @@ const display = (function () {
     const player2Input = document.querySelector('#player2');
     player2Input.value = 'Computer';
     player2Input.setAttribute('readonly', '');
-    game.ai = true;
+    ai = true;
   });
 
   btnPvp.addEventListener('click', function () {
@@ -371,7 +371,7 @@ const display = (function () {
     player2Input.removeAttribute('readonly');
     player2Input.removeAttribute('value');
     player2Input.placeholder = 'Change name';
-    game.ai = false;
+    ai = false;
   });
 
   btnStart.addEventListener('click', function () {
