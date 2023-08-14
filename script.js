@@ -8,6 +8,7 @@ let ai;
 const game = (function () {
   const gameCell = document.querySelectorAll('.game-cell');
   const gameBoard = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  let allowPlayerClicks = true;
   const winCells = [
     [0, 1, 2],
     [3, 4, 5],
@@ -18,40 +19,6 @@ const game = (function () {
     [0, 4, 8],
     [2, 4, 6],
   ];
-  // let currentPlayer;
-  let allowPlayerClicks = true;
-
-  // const test = function () {
-  //   if (currentPlayer === player1) {
-  //     currentPlayer = player2;
-  //   } else if (currentPlayer === player2) {
-  //     currentPlayer = player1;
-  //   }
-  // };
-
-  // window.addEventListener('click', function () {
-  //   test();
-  //   console.log(currentPlayer);
-  // });
-
-  // const changePlayer = function () {
-  //   // if (e.target.innerText) return;
-
-  //   if (currentPlayer === player1) {
-  //     currentPlayer = player2;
-  //     // console.log(currentPlayer);
-  //   } else if (currentPlayer === player2) {
-  //     currentPlayer = player1;
-  //     // console.log(currentPlayer);
-  //   }
-
-  //   // if (currentPlayer === player1) {
-  //   //   AIplay(player2);
-  //   //   currentPlayer = player1;
-  //   // }
-  //   // test();
-  //   // console.log(currentPlayer);
-  // };
 
   const changePlayer = function (player) {
     if (player === player1) {
@@ -69,20 +36,7 @@ const game = (function () {
     gameBoard[index] = player.sign;
     gameCell[index].innerText = player.sign;
     display.colorSign(currentPlayer, index);
-    // console.log('AI played:', index);
-
-    // Make sure currentPlayer is already player2
-    // console.log('Current player after AI:', currentPlayer);
-
-    // currentPlayer = player2;
-    // addSignToCell();
-    // currentPlayer = player1;
-    console.log(index);
   };
-
-  // const changeCurrentPlayer = function (player1) {
-  //   currentPlayer = player1;
-  // };
 
   const addSignToCell = function (e) {
     const i = e.target.dataset.index;
@@ -90,11 +44,8 @@ const game = (function () {
     if (typeof gameBoard[i] === 'number') {
       gameBoard[i] = currentPlayer.sign;
     }
-    // console.log(currentPlayer);
 
     e.target.innerText = gameBoard[i];
-    // console.log(currentPlayer);
-    // console.log(gameBoard);
   };
 
   const checkCells = function () {
@@ -181,16 +132,6 @@ const game = (function () {
     return bestMove;
   };
 
-  // const AIplay = function (player) {
-  //   if (player === player2) {
-  //     const { index } = AIminimax(gameBoard, player2);
-  //     gameBoard[index] = player.sign;
-  //     gameCell[index].innerText = player.sign;
-  //     console.log(index);
-  //   }
-  // };
-  // console.log('Outside event listener - ai:', ai);
-
   const getRandomDelay = function () {
     return Math.floor(Math.random() * (1100 - 300)) + 300;
   };
@@ -215,46 +156,15 @@ const game = (function () {
           display.displayCurrentPlayer(currentPlayer);
           checkCells();
           changePlayer(player2);
-          console.log(gameBoard);
-          console.log(currentPlayer);
-
           allowPlayerClicks = true;
         }, randomDelay);
       }
-      console.log(randomDelay);
     })
   );
 
-  // gameCell.forEach((cell) =>
-  //   cell.addEventListener('click', function (e) {
-  //     if (e.target.innerText) return;
-
-  //     changePlayer();
-  //     addSignToCell(e);
-  //     display.colorSign(currentPlayer, cell);
-  //     display.displayCurrentPlayer(currentPlayer);
-
-  //     if (ai && currentPlayer === player1) {
-  //       AIplay(player2);
-  //     }
-
-  //     console.log(currentPlayer);
-  //   })
-  // );
-
   return {
-    changePlayer,
-    addSignToCell,
-    checkCells,
-    // changeCurrentPlayer,
-    AIcheckEmptyCell,
-    AIcheckCells,
-    AIminimax,
-    AIplay,
     gameCell,
     gameBoard,
-    // ai,
-    // test,
   };
 })();
 
@@ -329,24 +239,7 @@ const display = (function () {
     submitName[1].value = submitName[3].value = '';
   };
 
-  // const colorSign = function (player, cell) {
-  //   // console.log(game.gameCell);
-  //   if (player.sign === 'X') {
-  //     cell.classList.add('X');
-  //     console.log(cell);
-  //     ;
-  //   }
-  //   if (player.sign === 'O') {
-  //     cell.classList.add('O');
-  //     console.log(cell);
-  //     ;
-  //   }
-  // };
-
   const colorSign = function (player, i) {
-    // console.log(game.gameCell);
-    // cell = game.gameCell.dataset.index;
-
     if (player.sign === 'X') {
       game.gameCell[i].classList.add('X');
     }
@@ -419,8 +312,6 @@ const player = function () {
 
       currentPlayer = player1;
       display.displayCurrentPlayer(player2);
-
-      // game.changePlayer(player1, player2);
     });
   };
   return { createPlayer, namePlayer };
