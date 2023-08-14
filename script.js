@@ -18,6 +18,7 @@ const game = (function () {
     [2, 4, 6],
   ];
   // let currentPlayer;
+  let allowPlayerClicks = true;
   let ai = true;
 
   // const test = function () {
@@ -192,10 +193,10 @@ const game = (function () {
 
   gameCell.forEach((cell) =>
     cell.addEventListener('click', function (e) {
-      if (e.target.innerText) return;
-      let index = e.target.dataset.index;
+      if (!allowPlayerClicks || e.target.innerText) return;
 
-      console.log(index);
+      allowPlayerClicks = false;
+      let index = e.target.dataset.index;
 
       addSignToCell(e);
       display.colorSign(currentPlayer, index);
@@ -204,16 +205,17 @@ const game = (function () {
       changePlayer(currentPlayer);
 
       if (ai && currentPlayer === player2) {
-        // setTimeout(() => AIplay(player2), 200);
+        setTimeout(() => {
+          AIplay(currentPlayer);
+          display.displayCurrentPlayer(currentPlayer);
+          checkCells();
+          changePlayer(player2);
+          console.log(gameBoard);
+          console.log(currentPlayer);
 
-        AIplay(currentPlayer);
-        checkCells();
-        changePlayer(player2);
-        console.log(gameBoard);
-        console.log(currentPlayer);
+          allowPlayerClicks = true;
+        }, 400);
       }
-
-      // console.log('Inside event listener - ai:', ai);
     })
   );
 
