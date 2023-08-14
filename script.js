@@ -18,7 +18,7 @@ const game = (function () {
     [2, 4, 6],
   ];
   // let currentPlayer;
-  let ai = false;
+  let ai = true;
 
   // const test = function () {
   //   if (currentPlayer === player1) {
@@ -33,31 +33,46 @@ const game = (function () {
   //   console.log(currentPlayer);
   // });
 
-  const changePlayer = function () {
-    // if (e.target.innerText) return;
+  // const changePlayer = function () {
+  //   // if (e.target.innerText) return;
 
-    if (currentPlayer === player1) {
+  //   if (currentPlayer === player1) {
+  //     currentPlayer = player2;
+  //     // console.log(currentPlayer);
+  //   } else if (currentPlayer === player2) {
+  //     currentPlayer = player1;
+  //     // console.log(currentPlayer);
+  //   }
+
+  //   // if (currentPlayer === player1) {
+  //   //   AIplay(player2);
+  //   //   currentPlayer = player1;
+  //   // }
+  //   // test();
+  //   // console.log(currentPlayer);
+  // };
+
+  const changePlayer = function (player) {
+    if (player === player1) {
       currentPlayer = player2;
-      // console.log(currentPlayer);
-    } else if (currentPlayer === player2) {
-      currentPlayer = player1;
-      // console.log(currentPlayer);
     }
-
-    // if (currentPlayer === player1) {
-    //   AIplay(player2);
-    //   currentPlayer = player1;
-    // }
-    // test();
-    // console.log(currentPlayer);
+    if (player === player2) {
+      currentPlayer = player1;
+    }
   };
 
   const AIplay = function (player) {
-    // if (ai && player !== player2) return;
+    if (AIcheckEmptyCell(gameBoard).length === 0) return;
 
     const { index } = AIminimax(gameBoard, player2);
     gameBoard[index] = player.sign;
     gameCell[index].innerText = player.sign;
+    display.colorSign(currentPlayer, index);
+    // console.log('AI played:', index);
+
+    // Make sure currentPlayer is already player2
+    // console.log('Current player after AI:', currentPlayer);
+
     // currentPlayer = player2;
     // addSignToCell();
     // currentPlayer = player1;
@@ -74,11 +89,11 @@ const game = (function () {
     if (typeof gameBoard[i] === 'number') {
       gameBoard[i] = currentPlayer.sign;
     }
-    console.log(currentPlayer);
+    // console.log(currentPlayer);
 
     e.target.innerText = gameBoard[i];
     // console.log(currentPlayer);
-    console.log(gameBoard);
+    // console.log(gameBoard);
   };
 
   const checkCells = function () {
@@ -173,25 +188,32 @@ const game = (function () {
   //     console.log(index);
   //   }
   // };
+  // console.log('Outside event listener - ai:', ai);
 
   gameCell.forEach((cell) =>
     cell.addEventListener('click', function (e) {
       if (e.target.innerText) return;
+      let index = e.target.dataset.index;
 
-      // if (currentPlayer === player2) {
-      //   AIplay(player2);
-      //   checkCells();
-      //   changePlayer();
-      //   console.log(gameBoard);
-      // }
+      console.log(index);
 
       addSignToCell(e);
-      display.colorSign(currentPlayer, cell);
+      display.colorSign(currentPlayer, index);
       display.displayCurrentPlayer(currentPlayer);
       checkCells();
-      changePlayer();
+      changePlayer(currentPlayer);
 
-      console.log(currentPlayer);
+      if (ai && currentPlayer === player2) {
+        // setTimeout(() => AIplay(player2), 200);
+
+        AIplay(currentPlayer);
+        checkCells();
+        changePlayer(player2);
+        console.log(gameBoard);
+        console.log(currentPlayer);
+      }
+
+      // console.log('Inside event listener - ai:', ai);
     })
   );
 
@@ -246,7 +268,7 @@ const display = (function () {
     const currentPlayerName = displayPlayer.children[0];
     const currentPlayerSign = displayPlayer.children[2];
 
-    if (player === player2) {
+    if (player === player1) {
       currentPlayerName.textContent = player2.name;
       currentPlayerSign.textContent = player2.sign;
       currentPlayerSign.classList.add('O');
@@ -299,13 +321,29 @@ const display = (function () {
     submitName[1].value = submitName[3].value = '';
   };
 
-  const colorSign = function (player, cell) {
+  // const colorSign = function (player, cell) {
+  //   // console.log(game.gameCell);
+  //   if (player.sign === 'X') {
+  //     cell.classList.add('X');
+  //     console.log(cell);
+  //     ;
+  //   }
+  //   if (player.sign === 'O') {
+  //     cell.classList.add('O');
+  //     console.log(cell);
+  //     ;
+  //   }
+  // };
+
+  const colorSign = function (player, i) {
     // console.log(game.gameCell);
+    // cell = game.gameCell.dataset.index;
+
     if (player.sign === 'X') {
-      cell.classList.add('X');
+      game.gameCell[i].classList.add('X');
     }
     if (player.sign === 'O') {
-      cell.classList.add('O');
+      game.gameCell[i].classList.add('O');
     }
   };
 
@@ -372,7 +410,7 @@ const player = function () {
       player2 = createPlayer(player2Name, 'O');
 
       currentPlayer = player1;
-      display.displayCurrentPlayer(currentPlayer);
+      display.displayCurrentPlayer(player2);
 
       // game.changePlayer(player1, player2);
     });
