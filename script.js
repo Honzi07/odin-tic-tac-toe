@@ -191,12 +191,17 @@ const game = (function () {
   // };
   // console.log('Outside event listener - ai:', ai);
 
+  const getRandomDelay = function () {
+    return Math.floor(Math.random() * (1100 - 300)) + 300;
+  };
+
   gameCell.forEach((cell) =>
     cell.addEventListener('click', function (e) {
       if (!allowPlayerClicks || e.target.innerText) return;
 
       allowPlayerClicks = false;
       let index = e.target.dataset.index;
+      const randomDelay = getRandomDelay();
 
       addSignToCell(e);
       display.colorSign(currentPlayer, index);
@@ -214,8 +219,9 @@ const game = (function () {
           console.log(currentPlayer);
 
           allowPlayerClicks = true;
-        }, 400);
+        }, randomDelay);
       }
+      console.log(randomDelay);
     })
   );
 
