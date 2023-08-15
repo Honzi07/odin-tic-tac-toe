@@ -140,7 +140,8 @@ const game = (function () {
     cell.addEventListener('click', function (e) {
       if ((!allowPlayerClicks && ai) || e.target.innerText) return;
 
-      allowPlayerClicks = false;
+      !ai ? (allowPlayerClicks = true) : (allowPlayerClicks = false);
+
       let index = e.target.dataset.index;
       const randomDelay = getRandomDelay();
 
@@ -165,6 +166,7 @@ const game = (function () {
   return {
     gameCell,
     gameBoard,
+    allowPlayerClicks,
   };
 })();
 
